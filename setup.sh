@@ -13,7 +13,7 @@ action() {
     export CMT_BASE="$PWD"
 
     # check if this setup script is sourced by a remote job
-    if [ "$CMT_ON_HTCONDOR" = "1" ]; then
+    if [ "$CMT_ON_HTCONDOR" = "1" ] || [ "$CMT_ON_SLURM" = "1" ]; then
         export CMT_REMOTE_JOB="1"
     else
         export CMT_REMOTE_JOB="0"
@@ -33,6 +33,14 @@ action() {
         export CMT_ON_CIEMAT="0"
     fi
 
+    # check if we're at llr
+    if [[ "$( hostname -f )" = *.in2p3.fr ]]; then
+        export CMT_ON_LLR="1"
+        export EXTRA_CLING_ARGS=" -O2"
+    else
+        export CMT_ON_LLR="0"
+    fi
+
     # check if we're at psi
     if [[ "$( hostname -f )" = *.psi.ch ]]; then
         export CMT_ON_PSI="1"
@@ -44,7 +52,7 @@ action() {
     if [ -z "$CMT_CERN_USER" ]; then
         if [ "$CMT_ON_LXPLUS" = "1" ] || [ "$CMT_ON_PSI" = "1" ]; then
             export CMT_CERN_USER="$( whoami )"
-        elif [ "$CMT_ON_CIEMAT" = "0" ]; then
+        elif [ "$CMT_ON_CIEMAT" = "0" ] && [ "$CMT_ON_LLR" = "0" ] ; then
             2>&1 echo "please set CMT_CERN_USER to your CERN user name and try again"
             return "1"
         fi
@@ -59,6 +67,16 @@ action() {
             # return "1"
         fi
     fi
+
+    # default llr name
+    if [ -z "$CMT_LLR_USER" ]; then
+        if [ "$CMT_ON_LLR" = "1" ]; then
+            export CMT_LLR_USER="$( whoami )"
+        # elif [ "$CMT_ON_LLR" = "0" ]; then
+        #     2>&1 echo "please set CMT_LLR_USER to your CIEMAT user name and try again"
+        #     return "1"
+        fi
+    fi    
 
     # default data directory
     if [ -z "$CMT_DATA" ]; then
@@ -77,25 +95,21 @@ action() {
         if [ "$CMT_ON_CIEMAT" = "1" ]; then
           [ -z "$CMT_STORE_EOS" ] && export CMT_STORE_EOS="/nfs/cms/$CMT_T3_USER/cmt"
         elif [ "$CMT_ON_PSI" = "1" ]; then
-          [ -z "$CMT_STORE_EOS" ] && export CMT_STORE_EOS="/pnfs/psi.ch/cms/trivcat/store/user/$CMT_T3_USER/HHbbtautau_Run3"
+          [ -z "$CMT_STORE_EOS" ] && export CMT_STORE_EOS=$CMT_STORE_LOCAL #"/pnfs/psi.ch/cms/trivcat/store/user/$CMT_T3_USER/HHbbtautau_Run3"
         fi
     elif [ -n "$CMT_CERN_USER" ]; then
       [ -z "$CMT_STORE_EOS" ] && export CMT_STORE_EOS="/eos/user/${CMT_CERN_USER:0:1}/$CMT_CERN_USER/cmt"
+    elif [ -n "$CMT_LLR_USER" ]; then
+      [ -z "$CMT_STORE_EOS" ] && export CMT_STORE_EOS="/data_CMS/cms/${CMT_LLR_USER:1}/cmt"
     fi
     [ -z "$CMT_STORE" ] && export CMT_STORE="$CMT_STORE_EOS"
     [ -z "$CMT_JOB_DIR" ] && export CMT_JOB_DIR="$CMT_DATA/jobs"
+    [ -z "$CMT_JOB_META_DIR" ] && export CMT_JOB_META_DIR="$CMT_DATA/jobs_meta"
     [ -z "$CMT_TMP_DIR" ] && export CMT_TMP_DIR="$CMT_DATA/tmp"
     [ -z "$CMT_CMSSW_BASE" ] && export CMT_CMSSW_BASE="$CMT_DATA/cmssw"
-    [ -z "$CMT_SCRAM_ARCH" ] && export CMT_SCRAM_ARCH="slc7_amd64_gcc820"  #"el8_amd64_gcc12"
+    [ -z "$CMT_SCRAM_ARCH" ] && export CMT_SCRAM_ARCH="slc7_amd64_gcc820" #"el8_amd64_gcc12"
     [ -z "$CMT_CMSSW_VERSION" ] && export CMT_CMSSW_VERSION="CMSSW_12_3_0_pre6" #"CMSSW_13_3_0"
     [ -z "$CMT_PYTHON_VERSION" ] && export CMT_PYTHON_VERSION="3"
-
-    # specific eos dirs
-    [ -z "$CMT_STORE_EOS_PREPROCESSING" ] && export CMT_STORE_EOS_PREPROCESSING="$CMT_STORE_EOS"
-    [ -z "$CMT_STORE_EOS_CATEGORIZATION" ] && export CMT_STORE_EOS_CATEGORIZATION="$CMT_STORE_EOS"
-    [ -z "$CMT_STORE_EOS_MERGECATEGORIZATION" ] && export CMT_STORE_EOS_MERGECATEGORIZATION="$CMT_STORE_EOS"
-    [ -z "$CMT_STORE_EOS_SHARDS" ] && export CMT_STORE_EOS_SHARDS="$CMT_STORE_EOS"
-    [ -z "$CMT_STORE_EOS_EVALUATION" ] && export CMT_STORE_EOS_EVALUATION="$CMT_STORE_EOS"
     if [ "$CMT_ON_CIEMAT" = "1" ]; then
        if [ -n "$CMT_TMPDIR" ]; then
          export TMPDIR="$CMT_TMPDIR"
@@ -104,6 +118,13 @@ action() {
        fi
        mkdir -p "$TMPDIR"
     fi
+
+    # specific eos dirs
+    [ -z "$CMT_STORE_EOS_PREPROCESSING" ] && export CMT_STORE_EOS_PREPROCESSING="$CMT_STORE_EOS"
+    [ -z "$CMT_STORE_EOS_CATEGORIZATION" ] && export CMT_STORE_EOS_CATEGORIZATION="$CMT_STORE_EOS"
+    [ -z "$CMT_STORE_EOS_MERGECATEGORIZATION" ] && export CMT_STORE_EOS_MERGECATEGORIZATION="$CMT_STORE_EOS"
+    [ -z "$CMT_STORE_EOS_SHARDS" ] && export CMT_STORE_EOS_SHARDS="$CMT_STORE_EOS"
+    [ -z "$CMT_STORE_EOS_EVALUATION" ] && export CMT_STORE_EOS_EVALUATION="$CMT_STORE_EOS"
 
     # create some dirs already
     mkdir -p "$CMT_TMP_DIR"
