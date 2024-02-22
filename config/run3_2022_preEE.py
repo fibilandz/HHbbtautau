@@ -15,16 +15,16 @@ class Config_2022_preEE(base_config, dataset_config):
         weights = DotDict()
         weights.default = "1"
         # weights.total_events_weights = ["genWeight", "puWeight", "DYstitchWeight"]
-        weights.total_events_weights = ["genWeight", "puWeight"]
+        # weights.total_events_weights = ["genWeight", "puWeight"]
 
-        weights.mutau = ["genWeight", "puWeight", "prescaleWeight", "trigSF",
-            "idAndIsoAndFakeSF", "L1PreFiringWeight", "PUjetID_SF",
-            "bTagweightReshape"]
+        # weights.mutau = ["genWeight", "puWeight", "prescaleWeight", "trigSF",
+        #     "idAndIsoAndFakeSF", "L1PreFiringWeight", "PUjetID_SF",
+        #     "bTagweightReshape"]
 
-        weights.etau = weights.mutau
-        weights.tautau = weights.mutau
-        weights.base_selection = weights.mutau
-        weights.base = weights.mutau
+        # weights.etau = weights.mutau
+        # weights.tautau = weights.mutau
+        # weights.base_selection = weights.mutau
+        # weights.base = weights.mutau
 
         # weights.channels_mult = {channel: jrs(weights.channels[channel], op="*")
             # for channel in weights.channels}
@@ -32,9 +32,9 @@ class Config_2022_preEE(base_config, dataset_config):
 
     def add_default_module_files(self):
         defaults = {}
-        defaults["PreprocessRDF"] = "modulesrdf"
-        defaults["PreCounter"] = "weights"
+        defaults["PreprocessRDF"] = "run3_modulesrdf"
+        defaults["PreCounter"] = "run3_weights"
         return defaults
 
 
-config = Config_2022_preEE("Config_2022_preEE", year=2018, ecm=13.6, lumi_pb=9739)
+config = Config_2022_preEE("Config_2022_preEE", year=2022, ecm=13.6, lumi_pb=9739)
