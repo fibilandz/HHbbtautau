@@ -89,7 +89,6 @@ drop Tau_chargedIso
 drop Tau_neutralIso
 drop SV.*
 drop nSV
-drop nOtherPV
 drop OtherPV_z
 drop SoftActivityJet.*
 drop nSoftActivityJet
