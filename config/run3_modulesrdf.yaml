@@ -1,0 +1,34 @@
+puweight:
+    name: puWeightRDF
+    path: Corrections.LUM.puWeight
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+        period: self.dataset.runPeriod
+        auto: True
+        file: self.get_path(self.get_input())[0] # this is needed only if  auto: True
+
+eleCorrections:
+    name: eleSFRDF
+    path: Corrections.EGM.eleCorrections
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+        period: self.dataset.runPeriod
+        wps: ["wp80iso"]
+
+# muCorrections:
+#     name: muSFRDF
+#     path: Corrections.MUO.muCorrections
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         isUL: self.dataset.has_tag('ul')
+
+# tauCorrections:
+#     name: tauSFRDF
+#     path: Corrections.TAU.tauCorrections
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         isUL: self.dataset.has_tag('ul')
