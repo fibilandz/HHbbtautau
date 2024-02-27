@@ -1,34 +1,183 @@
-puweight:
+PuWeight:
     name: puWeightRDF
     path: Corrections.LUM.puWeight
     parameters:
         isMC: self.dataset.process.isMC
         year: self.config.year
-        period: self.dataset.runPeriod
+        runPeriod: self.dataset.runPeriod
         auto: True
         file: self.get_path(self.get_input())[0] # this is needed only if  auto: True
 
-eleCorrections:
+# MET filters form Run3 are currenlty to be kept as Run2
+# (HBHE and HBHEiso noise filters are no longer needed but still present )
+# https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#Run_3_recommendations
+METfilters:
+    name: MetFilterRDF
+    path: Base.Modules.METfilters
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+
+LumiFilters:
+    name: lumiFilterRDF
+    path: Base.Modules.lumiFilter
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+
+EleCorrections_SF:
     name: eleSFRDF
     path: Corrections.EGM.eleCorrections
     parameters:
         isMC: self.dataset.process.isMC
         year: self.config.year
-        period: self.dataset.runPeriod
+        runPeriod: self.dataset.runPeriod
         wps: ["wp80iso"]
 
-# muCorrections:
-#     name: muSFRDF
-#     path: Corrections.MUO.muCorrections
-#     parameters:
-#         isMC: self.dataset.process.isMC
-#         year: self.config.year
-#         isUL: self.dataset.has_tag('ul')
+EleCorrections_SS:
+    name: eleSSRDF
+    path: Corrections.EGM.eleCorrections
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+        runPeriod: self.dataset.runPeriod
 
-# tauCorrections:
-#     name: tauSFRDF
-#     path: Corrections.TAU.tauCorrections
+MuCorrections:
+    name: muSFRDF
+    path: Corrections.MUO.muCorrections
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+        runPeriod: self.dataset.runPeriod
+        wps: ["tight_id", "tight_iso"]
+
+# Now contains a patch to make HHLepton_Selection work but needs to be fixed 
+# to properly take into account the WP in the TES evaluation
+TauCorrections:
+    name: tauSFRDF
+    path: Corrections.TAU.tauCorrections
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+        runPeriod: self.dataset.runPeriod
+        vsjet_wps: ["Medium", "Tight"]
+        vse_wps: ["VVLoose", "Tight"]
+        vsmu_wps: ["VLoose", "Tight"]
+        vsjet_vse_wp: "VVLoose"
+
+BTagCorrections:
+    name: btagSFRDF
+    path: Corrections.BTV.btagCorrections
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+        runPeriod: self.dataset.runPeriod
+        wps: ['shape', 'M']
+
+# Now work in a patch of TauCorrections but needs to be fixed 
+# to properly take into account the WP in the TES evaluation
+HHLepton_Selection:
+    name: HHLeptonRDF
+    path: Tools.Tools.HHLepton
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+        runPeriod: self.dataset.runPeriod
+        runEra: self.dataset.runEra
+        pairType_filter: True
+        vvvl_vsjet: self.config.deeptau.vsjet.VVVLoose
+        vl_vse: self.config.deeptau.vse.VLoose
+        vvl_vse: self.config.deeptau.vse.VVLoose
+        t_vsmu: self.config.deeptau.vsmu.Tight
+        vl_vsmu: self.config.deeptau.vsmu.VLoose
+
+HHLepton_Variables:
+    name: HHLeptonVarRDF
+    path: Tools.Tools.HHLepton
+    parameters:
+        isMC: self.dataset.process.isMC
+        year: self.config.year
+
+## FROM HERE UP ALL DONE/TESTED 
+############################################
+## FROM HERE DOWN ALL TO BE DONE/TESTED 
+
+# JmeCorrections_SF:
+#     name: 
+#     path: 
 #     parameters:
 #         isMC: self.dataset.process.isMC
 #         year: self.config.year
-#         isUL: self.dataset.has_tag('ul')
+#         runPeriod: self.dataset.runPeriod
+
+# JmeCorrections_PUJetID:
+#     name: 
+#     path: 
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
+
+# HHJet_Selection:
+#     name: HHJetsRDF
+#     path: Tools.Tools.HHJets
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
+
+# SVfit:
+#     name: SVFitRDF
+#     path: Tools.Tools.svfit
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
+
+# HHKinFit:
+#     name: HHKinFitRDF
+#     path: Tools.Tools.hh
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
+
+# IdAndIsoSF:
+#     name: dauIdIsoSFRDF
+#     path: Tools.Tools.dauIdIso
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
+
+# TrigSF: ???
+#     name: Htt_trigSFRDF
+#     path: Tools.Tools.Htt_trigSF
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
+
+# HHBTagDNN:
+#     name: 
+#     path: 
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
+
+# MulticlassifierDNN:
+#     name: HHMulticlassRDF
+#     path: Tools.Tools.HHMulticlass
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
+
+# HHDNN:
+#     name: HHDNNRDF 
+#     path: Tools.Tools.HHDNN 
+#     parameters:
+#         isMC: self.dataset.process.isMC
+#         year: self.config.year
+#         runPeriod: self.dataset.runPeriod
