@@ -8,9 +8,6 @@ PuWeight:
         auto: True
         file: self.get_path(self.get_input())[0] # this is needed only if  auto: True
 
-# MET filters form Run3 are currenlty to be kept as Run2
-# (HBHE and HBHEiso noise filters are no longer needed but still present )
-# https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#Run_3_recommendations
 METfilters:
     name: MetFilterRDF
     path: Base.Modules.METfilters

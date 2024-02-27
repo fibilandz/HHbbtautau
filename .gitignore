@@ -6,3 +6,4 @@ correctionlib*
 docs/build
 */__pycache__/
 NanoAOD_examples
+analysis_tools_localNonSw
