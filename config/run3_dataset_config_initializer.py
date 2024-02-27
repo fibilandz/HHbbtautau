@@ -1,8 +1,8 @@
 import copy
 import os
 
-# year = '2022'; pre_post = 'pre'; lumi = "9739"
-year = '2022'; pre_post = 'post'; lumi = "27787"
+year = '2022'; pre_post = 'pre'; lumi = "9739"
+# year = '2022'; pre_post = 'post'; lumi = "27787"
 # year = '2023'; pre_post = 'pre'; lumi = "19884"
 # year = '2023'; pre_post = 'post'; lumi = "9959"
 
@@ -598,6 +598,7 @@ with open(file_path, 'a') as f:
                 f.write('\t\t\t\t\tprocess=self.processes.get("'+das[1]+'"),\n')
                 if 'data' not in proc_group: f.write('\t\t\t\t\txs=1.0,\n')
                 f.write('\t\t\t\t\trunPeriod="'+pre_post+issue+'",\n')
+                if 'data' in proc_group: f.write('\t\t\t\t\trunEra="'+das[1][-1]+'",\n')
                 f.write('\t\t\t\t\ttags=["'+das[2]+'"]),\n\n')
     
     f.write('\t\t]\n')
