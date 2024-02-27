@@ -9,14 +9,16 @@ from cmt.base_tasks.base import Task
 
 class Config(cmt_base_config):
     def __init__(self, *args, **kwargs):
-        # https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation102X
-        self.btag=DotDict(tight=0.7264, medium=0.2770, loose=0.0494)
+        # ParticleNet WPs taken from BTV SF json
+        self.btag=DotDict(xxtight=0.9610, xtight=0.7862, tight=0.6734, medium=0.2450, loose=0.0470)
+
+        # DeepTau2018v2p5 wpbit changed from power 2 to integer in latest NanoAOD
         self.deeptau=DotDict(
-            vsjet=DotDict(VVVLoose=1, VVLoose=3, VLoose=7, Loose=15, Medium=31,
-                Tight=63, VTight=127, VVTight=255),
-            vse=DotDict(VVVLoose=1, VVLoose=3, VLoose=7, Loose=15, Medium=31,
-                Tight=63, VTight=127, VVTight=255),
-            vsmu=DotDict(VLoose=1, Loose=3, Medium=7, Tight=15),
+            vsjet = DotDict(VVVLoose = 1, VVLoose = 2, VLoose = 3, Loose = 4, 
+                            Medium = 5, Tight = 6, VTight = 7, VVTight = 8),
+            vse   = DotDict(VVVLoose = 1, VVLoose = 2, VLoose = 3, Loose = 4, 
+                            Medium = 5, Tight = 6, VTight = 7, VVTight = 8),
+            vsmu  = DotDict(VLoose = 1, Loose = 2, Medium = 3, Tight = 4),
         )
 
         self.channels = self.add_channels()
@@ -40,41 +42,45 @@ class Config(cmt_base_config):
         region_names = ["Signal region", "OS inv. iso", "SS iso", "SS inv. iso"]
         selection["os_iso"] = {
             "mutau":  ["isOS == 1",
-                            "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
             "etau":   ["isOS == 1",
-                            "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
             "tautau": ["isOS == 1",
-                            "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
-                            "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
         }
         selection["os_inviso"] = {
-            "mutau": ["isOS == 1", "dau2_idDeepTau2018v2p5VSjet >= 1",
-                            "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
-            "etau":   ["isOS == 1", "dau2_idDeepTau2018v2p5VSjet >= 1",
-                            "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+            "mutau":  ["isOS == 1", 
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
+                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+            "etau":   ["isOS == 1",
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
+                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
             "tautau": ["isOS == 1",
-                            "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
-                            "dau2_idDeepTau2018v2p5VSjet >= 1",
-                            "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+                       "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
+                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
         }
         selection["ss_iso"] = {
             "mutau":  ["isOS == 0",
-                            "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
             "etau":   ["isOS == 0",
-                            "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
             "tautau": ["isOS == 0",
-                            "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
-                            "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
         }
         selection["ss_inviso"] = {
-            "mutau":  ["isOS == 0", "dau2_idDeepTau2018v2p5VSjet >= 1",
-                            "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
-            "etau":   ["isOS == 0", "dau2_idDeepTau2018v2p5VSjet >= 1",
-                            "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+            "mutau":  ["isOS == 0", 
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
+                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+            "etau":   ["isOS == 0",
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
+                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
             "tautau": ["isOS == 0",
-                            "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
-                            "dau2_idDeepTau2018v2p5VSjet >= 1",
-                            "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+                       "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
+                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
+                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
         }
         regions = []
         for channel in self.channels:
@@ -105,7 +111,7 @@ class Config(cmt_base_config):
         reject_sel = ["pairType == -31415"]
 
         sel = DotDict()
-        btag = kwargs.pop("btag", "Jet_btagDeepFlavB.at(bjet{}_JetIdx)")
+        btag = kwargs.pop("btag", "Jet_btagPNetB.at(bjet{}_JetIdx)")
         df = lambda i, op, wp: "{} {} {}".format(btag.format(i), op, self.btag[wp])
         sel["btag"] = DotDict(
             m_first=[df(1, ">", "medium")],
@@ -808,7 +814,20 @@ class Config(cmt_base_config):
 
     def add_systematics(self):
         systematics = []
+        #     Systematic("tes", "_corr",
+        #         affected_categories=self.categories.names(),
+        #         module_syst_type="tau_syst"),
+        # ]
         
+        # systematics = [
+        #     Systematic("jet_smearing", "_nom"),
+        #     Systematic("met_smearing", ("MET", "MET_smeared")),
+        #     Systematic("prefiring", "_Nom"),
+        #     Systematic("prefiring_syst", "", up="_Up", down="_Dn"),
+        #     Systematic("pu", "", up="Up", down="Down"),
+        #     Systematic("empty", "", up="", down="")
+        # ]
+
         return ObjectCollection(systematics)
 
     # other methods

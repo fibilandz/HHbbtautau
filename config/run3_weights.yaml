@@ -4,6 +4,6 @@ puweight:
     parameters:
         isMC: self.dataset.process.isMC
         year: self.config.year
-        period: self.dataset.runPeriod
+        runPeriod: self.dataset.runPeriod
         auto: True
         file: self.get_path(self.get_input())[0] # this is needed only if  auto: True

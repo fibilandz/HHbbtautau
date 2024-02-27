@@ -14,8 +14,7 @@ class Config_2022_preEE(base_config, dataset_config):
     def add_weights(self):
         weights = DotDict()
         weights.default = "1"
-        # weights.total_events_weights = ["genWeight", "puWeight", "DYstitchWeight"]
-        # weights.total_events_weights = ["genWeight", "puWeight"]
+        weights.total_events_weights = ["genWeight", "puWeight"]
 
         # weights.mutau = ["genWeight", "puWeight", "prescaleWeight", "trigSF",
         #     "idAndIsoAndFakeSF", "L1PreFiringWeight", "PUjetID_SF",
