@@ -45,7 +45,6 @@ drop Electron_mvaTTH
 drop Electron_sieie
 drop Electron_scEtOverPt
 drop Electron_jetRelIso
-drop Electron_r9
 drop Electron_jetPtRelv2
 drop Electron_vidNestedWPBitmap
 drop Electron_energyErr
@@ -62,7 +61,6 @@ drop Electron_tightCharge
 drop Electron_isPFcand
 drop Electron_lostHits
 drop Electron_cutBased_HEEP
-drop Electron_seedGain
 drop Electron_photonIdx
 drop Electron_fsrPhotonIdx
 drop Muon_miniPFRelIso_all
@@ -89,7 +87,6 @@ drop Tau_chargedIso
 drop Tau_neutralIso
 drop SV.*
 drop nSV
-drop nOtherPV
 drop OtherPV_z
 drop SoftActivityJet.*
 drop nSoftActivityJet
