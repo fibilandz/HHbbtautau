@@ -35,5 +35,4 @@ class Config_2022_preEE(base_config, dataset_config):
         defaults["PreCounter"] = "run3_weights"
         return defaults
 
-
-config = Config_2022_preEE("Config_2022_preEE", year=2022, ecm=13.6, lumi_pb=9739)
+config = Config_2022_preEE("Config_2022_preEE", year=2022, runPeriod="preEE", ecm=13.6, lumi_pb=9739)

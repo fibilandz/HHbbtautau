@@ -596,9 +596,9 @@ with open(file_path, 'a') as f:
                 f.write('\t\t\tDataset("'+das[1]+'",\n')
                 f.write('\t\t\t\t\tdataset="'+das[0]+'",\n')
                 f.write('\t\t\t\t\tprocess=self.processes.get("'+das[1]+'"),\n')
-                if 'data' not in proc_group: f.write('\t\t\t\t\txs=1.0,\n')
-                f.write('\t\t\t\t\trunPeriod="'+pre_post+issue+'",\n')
                 if 'data' in proc_group: f.write('\t\t\t\t\trunEra="'+das[1][-1]+'",\n')
+                else:                    f.write('\t\t\t\t\txs=1.0,\n')
+                
                 f.write('\t\t\t\t\ttags=["'+das[2]+'"]),\n\n')
     
     f.write('\t\t]\n')

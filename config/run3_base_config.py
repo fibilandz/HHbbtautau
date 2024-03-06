@@ -922,4 +922,4 @@ class Config(cmt_base_config):
         return systematics
 
 
-config = Config("Config", year=2022, ecm=13.6, lumi_pb=9739)
+config = Config("Config", year=2022, runPeriod="preEE", ecm=13.6, lumi_pb=9739)
