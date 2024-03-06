@@ -9,18 +9,8 @@ from cmt.base_tasks.base import Task
 
 class Config(cmt_base_config):
     def __init__(self, *args, **kwargs):
-        # ParticleNet WPs taken from BTV SF json
-        self.btag=DotDict(xxtight=0.9610, xtight=0.7862, tight=0.6734, medium=0.2450, loose=0.0470)
-
-        # DeepTau2018v2p5 wpbit changed from power 2 to integer in latest NanoAOD
-        self.deeptau=DotDict(
-            vsjet = DotDict(VVVLoose = 1, VVLoose = 2, VLoose = 3, Loose = 4, 
-                            Medium = 5, Tight = 6, VTight = 7, VVTight = 8),
-            vse   = DotDict(VVVLoose = 1, VVLoose = 2, VLoose = 3, Loose = 4, 
-                            Medium = 5, Tight = 6, VTight = 7, VVTight = 8),
-            vsmu  = DotDict(VLoose = 1, Loose = 2, Medium = 3, Tight = 4),
-        )
-
+        self = self.add_tau_id(2022, "idDeepTau2018v2p5")
+        self = self.add_bjet_id("PNetB")
         self.channels = self.add_channels()
         self.regions = self.add_regions()
         self.categories = self.add_categories()
@@ -42,45 +32,45 @@ class Config(cmt_base_config):
         region_names = ["Signal region", "OS inv. iso", "SS iso", "SS inv. iso"]
         selection["os_iso"] = {
             "mutau":  ["isOS == 1",
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium],
             "etau":   ["isOS == 1",
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium],
             "tautau": ["isOS == 1",
-                       "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau1_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium,
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium],
         }
         selection["os_inviso"] = {
             "mutau":  ["isOS == 1", 
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
-                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.VVVLoose,
+                       "dau2_tauIdVSjet < %s" % self.tauId_algo_wps.vsjet.Medium],
             "etau":   ["isOS == 1",
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
-                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.VVVLoose,
+                       "dau2_tauIdVSjet < %s" % self.tauId_algo_wps.vsjet.Medium],
             "tautau": ["isOS == 1",
-                       "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
-                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+                       "dau1_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium,
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.VVVLoose,
+                       "dau2_tauIdVSjet < %s" % self.tauId_algo_wps.vsjet.Medium],
         }
         selection["ss_iso"] = {
             "mutau":  ["isOS == 0",
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium],
             "etau":   ["isOS == 0",
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium],
             "tautau": ["isOS == 0",
-                       "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium],
+                       "dau1_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium,
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium],
         }
         selection["ss_inviso"] = {
             "mutau":  ["isOS == 0", 
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
-                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.VVVLoose,
+                       "dau2_tauIdVSjet < %s" % self.tauId_algo_wps.vsjet.Medium],
             "etau":   ["isOS == 0",
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
-                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.VVVLoose,
+                       "dau2_tauIdVSjet < %s" % self.tauId_algo_wps.vsjet.Medium],
             "tautau": ["isOS == 0",
-                       "dau1_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.Medium,
-                       "dau2_idDeepTau2018v2p5VSjet >= %s" % self.deeptau.vsjet.VVVLoose,
-                       "dau2_idDeepTau2018v2p5VSjet < %s" % self.deeptau.vsjet.Medium],
+                       "dau1_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.Medium,
+                       "dau2_tauIdVSjet >= %s" % self.tauId_algo_wps.vsjet.VVVLoose,
+                       "dau2_tauIdVSjet < %s" % self.tauId_algo_wps.vsjet.Medium],
         }
         regions = []
         for channel in self.channels:
@@ -111,8 +101,8 @@ class Config(cmt_base_config):
         reject_sel = ["pairType == -31415"]
 
         sel = DotDict()
-        btag = kwargs.pop("btag", "Jet_btagPNetB.at(bjet{}_JetIdx)")
-        df = lambda i, op, wp: "{} {} {}".format(btag.format(i), op, self.btag[wp])
+        btag = kwargs.pop("btag", "Jet_btag%s.at(bjet{}_JetIdx)" % self.btag_algo)
+        df = lambda i, op, wp: "{} {} {}".format(btag.format(i), op, self.btag_algo_wps[wp])
         sel["btag"] = DotDict(
             m_first=[df(1, ">", "medium")],
             m_second=[df(2, ">", "medium")],
